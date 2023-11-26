@@ -1,0 +1,8 @@
+config/
+shard1/
+shard2/
+shard3/
+mongos/
+data/
+
+

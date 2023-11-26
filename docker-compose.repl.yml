@@ -1,0 +1,136 @@
+version: '2'
+services:
+  shard1.1:
+    image: mongo:latest
+    container_name: mongo_shard1.1
+    # --shardsvr: 这个参数仅仅只是将默认的27017端口改为27018,如果指定--port参数，可用不需要这个参数
+    # --directoryperdb：每个数据库使用单独的文件夹
+    command: mongod -f /etc/mongod.conf/shard1.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /home/barry/workspaces/ops/mongo-cluster/conf:/etc/mongod.conf
+      - /home/barry/workspaces/ops/mongo-cluster/conf/mongo.keyfile:/etc/mongod.conf/mongo.keyfile:ro
+      - /home/barry/workspaces/ops/mongo-cluster/shard1/1/:/var/run/mongod
+      - /home/barry/workspaces/ops/mongo-cluster/shard1/1/log:/var/run/mongod/log
+      - /home/barry/workspaces/ops/mongo-cluster/shard1/1/data:/data/db
+    privileged: true
+    mem_limit: 16000000000
+    networks:
+      - mongo_cluster   
+
+  shard1.2:
+    image: mongo:latest
+    container_name: mongo_shard1.2
+    command: mongod -f /etc/mongod.conf/shard1.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /home/barry/workspaces/ops/mongo-cluster/conf:/etc/mongod.conf
+      - /home/barry/workspaces/ops/mongo-cluster/conf/mongo.keyfile:/etc/mongod.conf/mongo.keyfile:ro
+      - /home/barry/workspaces/ops/mongo-cluster/shard1/2/:/var/run/mongod
+      - /home/barry/workspaces/ops/mongo-cluster/shard1/2/log:/var/run/mongod/log
+      - /home/barry/workspaces/ops/mongo-cluster/shard1/2/data:/data/db
+    privileged: true
+    mem_limit: 16000000000
+    networks:
+      - mongo_cluster
+
+  shard1.3:
+    image: mongo:latest
+    container_name: mongo_shard1.3
+    command: mongod -f /etc/mongod.conf/shard1.conf
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /home/barry/workspaces/ops/mongo-cluster/conf:/etc/mongod.conf
+      - /home/barry/workspaces/ops/mongo-cluster/conf/mongo.keyfile:/etc/mongod.conf/mongo.keyfile:ro
+      - /home/barry/workspaces/ops/mongo-cluster/shard1/3/:/var/run/mongod
+      - /home/barry/workspaces/ops/mongo-cluster/shard1/3/log:/var/run/mongod/log
+      - /home/barry/workspaces/ops/mongo-cluster/shard1/3/data:/data/db
+    privileged: true
+    mem_limit: 16000000000
+    networks:
+      - mongo_cluster
+
+  config1:
+    image: mongo:latest
+    container_name: mongo_config1
+    # --configsvr: 这个参数仅仅是将默认端口由27017改为27019, 如果指定--port可不添加该参数
+    command: mongod -f /etc/mongod.conf/config.conf 
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /home/barry/workspaces/ops/mongo-cluster/conf:/etc/mongod.conf
+      - /home/barry/workspaces/ops/mongo-cluster/conf/mongo.keyfile:/etc/mongod.conf/mongo.keyfile:ro
+      - /home/barry/workspaces/ops/mongo-cluster/config/1/:/var/run/mongod
+      - /home/barry/workspaces/ops/mongo-cluster/config/1/log:/var/run/mongod/log
+      - /home/barry/workspaces/ops/mongo-cluster/config/1/data:/data/configdb
+    networks:
+      - mongo_cluster
+
+  config2:
+    image: mongo:latest
+    container_name: mongo_config2
+    command: mongod -f /etc/mongod.conf/config.conf 
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /home/barry/workspaces/ops/mongo-cluster/conf:/etc/mongod.conf
+      - /home/barry/workspaces/ops/mongo-cluster/conf/mongo.keyfile:/etc/mongod.conf/mongo.keyfile:ro
+      - /home/barry/workspaces/ops/mongo-cluster/config/2/:/var/run/mongod
+      - /home/barry/workspaces/ops/mongo-cluster/config/2/log:/var/run/mongod/log
+      - /home/barry/workspaces/ops/mongo-cluster/config/2/data:/data/configdb
+    networks:
+      - mongo_cluster
+
+  config3:
+    image: mongo:latest
+    container_name: mongo_config3
+    command: mongod -f /etc/mongod.conf/config.conf 
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /home/barry/workspaces/ops/mongo-cluster/conf:/etc/mongod.conf
+      - /home/barry/workspaces/ops/mongo-cluster/conf/mongo.keyfile:/etc/mongod.conf/mongo.keyfile:ro
+      - /home/barry/workspaces/ops/mongo-cluster/config/3/:/var/run/mongod
+      - /home/barry/workspaces/ops/mongo-cluster/config/3/log:/var/run/mongod/log
+      - /home/barry/workspaces/ops/mongo-cluster/config/3/data:/data/configdb
+    networks:
+      - mongo_cluster
+
+  mongos:
+    image: mongo:latest
+    container_name: mongo_mongos
+    # mongo3.6版默认绑定IP为127.0.0.1，此处绑定0.0.0.0是允许其他容器或主机可以访问
+    command: mongos -f /etc/mongod.conf/mongos.conf 
+    ports:
+      - 20000:20000
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /home/barry/workspaces/ops/mongo-cluster/conf:/etc/mongod.conf
+      - /home/barry/workspaces/ops/mongo-cluster/mongos/1/:/var/run/mongod
+      - /home/barry/workspaces/ops/mongo-cluster/mongos/1/log:/var/run/mongod/log
+      - /home/barry/workspaces/ops/mongo-cluster/mongos/1/data:/data/configdb
+    depends_on:
+      - config1
+      - config2
+      - config3
+    networks:
+      - mongo_cluster
+  mongos2:
+    image: mongo:latest
+    container_name: mongo_mongos_2
+    # mongo3.6版默认绑定IP为127.0.0.1，此处绑定0.0.0.0是允许其他容器或主机可以访问
+    command: mongos -f /etc/mongod.conf/mongos.conf 
+    ports:
+      - 20001:20000
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /home/barry/workspaces/ops/mongo-cluster/conf:/etc/mongod.conf
+      - /home/barry/workspaces/ops/mongo-cluster/mongos/2/:/var/run/mongod
+      - /home/barry/workspaces/ops/mongo-cluster/mongos/2/log:/var/run/mongod/log
+      - /home/barry/workspaces/ops/mongo-cluster/mongos/2/data:/data/configdb
+    depends_on:
+      - config1
+      - config2
+      - config3
+    networks:
+      - mongo_cluster
+networks:
+  mongo_cluster:
+    external: true
