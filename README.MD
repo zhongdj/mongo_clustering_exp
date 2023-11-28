@@ -78,21 +78,12 @@ mkdir -p shard3/2/log
 mkdir -p shard3/3/data
 mkdir -p shard3/3/log
 
-sudo touch config/1/log/configsvr.log
-sudo touch config/2/log/configsvr.log
-sudo touch shard1/1/log/shard1.log
-sudo touch shard1/2/log/shard1.log
-sudo touch shard1/3/log/shard1.log
-sudo touch shard2/1/log/shard2.log
-sudo touch shard2/2/log/shard2.log
-sudo touch shard2/3/log/shard2.log
-sudo touch shard3/1/log/shard3.log
-sudo touch shard3/2/log/shard3.log
-sudo touch shard3/3/log/shard3.log
-
-sudo chmod -R 777 shard1 
-sudo chmod -R 777 shard2
-sudo chmod -R 777 shard3 
+# for security
+sudo chown 999:999 conf/mongo.keyfile
+# for container gen pid
+sudo chown 999:999 config/1 config/2 config/3 mongos/1 mongos/2 shard1/1 shard1/2 shard1/3 shard2/1 shard2/2 shard2/3 shard3/1 shard3/2 shard3/3
+# for log
+sudo chown 999:999 config/1/log config/2/log config/3/log mongos/1/log mongos/2/log shard1/1/log shard1/2/log shard1/3/log shard2/1/log shard2/2/log shard2/3/log shard3/1/log shard3/2/log shard3/3/log
 ```
 
 ## 安全认证-生成密钥
