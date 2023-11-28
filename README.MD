@@ -111,7 +111,7 @@ docker exec -it mongo_config1 mongosh 127.0.0.1:21000
 config = {_id: "configs", members: [
     {_id: 0, host: "config1:21000"},
     {_id: 1, host: "config2:21000"},
-    {_id: 2, host: "config3:21000", arbiterOnly:true}
+    {_id: 2, host: "config3:21000"}
 ]}
 rs.initiate(config)
 rs.stats()
