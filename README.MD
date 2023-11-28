@@ -81,12 +81,12 @@ mkdir -p shard3/3/log
 touch shard1/1/log/shard1.log
 touch shard1/2/log/shard1.log
 touch shard1/3/log/shard1.log
-touch shard2/1/log/shard1.log
-touch shard2/2/log/shard1.log
-touch shard2/3/log/shard1.log
-touch shard3/1/log/shard1.log
-touch shard3/2/log/shard1.log
-touch shard3/3/log/shard1.log
+touch shard2/1/log/shard2.log
+touch shard2/2/log/shard2.log
+touch shard2/3/log/shard2.log
+touch shard3/1/log/shard3.log
+touch shard3/2/log/shard3.log
+touch shard3/3/log/shard3.log
 
 sudo chmod -R 777 shard1 
 sudo chmod -R 777 shard2
