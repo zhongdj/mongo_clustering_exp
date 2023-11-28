@@ -180,6 +180,8 @@ db.createUser(
     roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
   }
 )
+// 认证完成集群配置 
+db.auth('admin', 'admin')
  db.grantRolesToUser(
   'admin',
      [
@@ -189,7 +191,7 @@ db.createUser(
      ]
  )
 
-## 认证完成集群配置 
+
 db.auth('admin', 'admin')
 db.adminCommand(
   {
