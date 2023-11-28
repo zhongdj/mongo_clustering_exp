@@ -114,7 +114,7 @@ config = {_id: "configs", members: [
     {_id: 2, host: "config3:21000"}
 ]}
 rs.initiate(config)
-rs.stats()
+rs.status()
 ```
 
 ## 配置 Shard 节点副本集
@@ -131,7 +131,7 @@ config = {_id: "shard1", members: [
     {_id: 2, host: "shard1.3:27001", arbiterOnly:true}
 ]}
 rs.initiate(config)
-rs.stats()
+rs.status()
 ```
 
 ### Shard2
