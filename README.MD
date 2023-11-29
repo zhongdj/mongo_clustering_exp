@@ -187,6 +187,8 @@ db.auth('admin', 'admin')
      [
          { role: 'readWrite', db: 'timed-box-journal' },
          { role: 'dbAdmin', db: 'timed-box-journal' },
+         { role: 'readWrite', db: 'import-db' },
+         { role: 'dbAdmin', db: 'import-db' },
          { role: 'clusterAdmin', db: 'admin' }
      ]
  )
